@@ -11,6 +11,9 @@ using Owin;
 using LocalAccountsApp.Providers;
 using LocalAccountsApp.Models;
 
+
+[assembly: OwinStartup(typeof(LocalAccountsApp.Startup))]
+
 namespace LocalAccountsApp
 {
     public partial class Startup
@@ -32,14 +35,19 @@ namespace LocalAccountsApp
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
             // Configure the application for OAuth based flow
+				bool requireHttps = true;
+#if DEBUG
+				requireHttps = false;
+#endif
+
             PublicClientId = "self";
             OAuthOptions = new OAuthAuthorizationServerOptions
             {
                 TokenEndpointPath = new PathString("/Token"),
                 Provider = new ApplicationOAuthProvider(PublicClientId),
-                AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(14)
-                //AllowInsecureHttp = true
+                //AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),	//don't seem to need this from original sample
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
+                AllowInsecureHttp = !requireHttps
             };
 
             // Enable the application to use bearer tokens to authenticate users

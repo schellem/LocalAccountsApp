@@ -10,8 +10,11 @@
     self.registerPassword = ko.observable();
     self.registerPassword2 = ko.observable();
 
-    self.loginEmail = ko.observable();
+    self.loginEmail = ko.observable("a@b.com");
+	 
     self.loginPassword = ko.observable();
+
+   
 
     function showError(jqXHR) {
         self.result(jqXHR.status + ': ' + jqXHR.statusText);
@@ -21,6 +24,7 @@
         self.result('');
 
         var token = sessionStorage.getItem(tokenKey);
+        //var token = "JHduvrwAFImuBG5D-yiU7oskQ2z82djff66ZpMc2CbjCW2cQSftXcBTDOIwEC02Y1CsvCyI1rhaCWzEW0DmnXSBXLvNZPnzTpyf43n9Jk7pqgTYvdCkBQjwihY6kzfGnqruaT93yUmS3fRAR-b0jhz-eDkaGe90t4M0ESow4UOfbNnxniAUSi73YX4GOkpc7I7HFRzstJ1mocKi4UdxpRozroS-n1oFxy3QXkcBhpjLpwGUG4u_SPSX0LJZBJZdziBdG-M6bU-UHYpzL3MgTNr_B2i7tLjZJMVWkvwuZQwi3KZ0jgHzWXwFmkQfFK2E7TV-ANSm5Y1fEHfKigGSGbcEl799WqW68hp-LVynzIovFVTK_qLWl8jkz2rX-Nft-8URgwPXkP6DS52hkXFNnsnXodEhCVhv0tcf-qBn4mmLYNn1iTd_GGsk_MjHZZJOrieBR1xVQHyDeTEJIvCTCFOyzEkDNKltA4h6n-8dXfeoSZOoRM5IE7sng7o_NgTP689Mg3YOtVIaGxgxM8ANttw";
         var headers = {};
         if (token) {
             headers.Authorization = 'Bearer ' + token;
@@ -69,7 +73,8 @@
             data: loginData
         }).done(function (data) {
             self.user(data.userName);
-            // Cache the access token in session storage.
+          // Cache the access token in session storage.
+           // alert("Token Issued Expires: " + data[".expires"]);
             sessionStorage.setItem(tokenKey, data.access_token);
         }).fail(showError);
     }
@@ -79,6 +84,7 @@
         sessionStorage.removeItem(tokenKey)
     }
 }
-
 var app = new ViewModel();
+
 ko.applyBindings(app);
+

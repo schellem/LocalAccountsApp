@@ -39,11 +39,21 @@ namespace LocalAccountsApp.Providers
                 return;
             }
 
-            ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager,
-               OAuthDefaults.AuthenticationType);
-            ClaimsIdentity cookiesIdentity = await user.GenerateUserIdentityAsync(userManager,
-                CookieAuthenticationDefaults.AuthenticationType);
+				//get our users claims to be put in the returned Token
+				//The returned Token is accessed on client via data.access_token. 
+				//	 Can't read the Tokens contents in client
+				//	 To use it pass the raw data back in Authorization header like this 'Bearer ' + data.access_token
+				//NOTE: We have to calls to get Claims.....I'm speculating The Cookies on is for Authentication purposes while OAuth is Authorization????
 
+
+				//I have added a custom claim in the GenerateUserIdentityAsync call (couldn't\didn't figure out how to have the claim come from DB)
+				//	 This, and all, claims get returned to client in the Token, then when the Token is passed back from the client the claim is available to back end
+            ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager, OAuthDefaults.AuthenticationType);
+				
+
+            ClaimsIdentity cookiesIdentity = await user.GenerateUserIdentityAsync(userManager, CookieAuthenticationDefaults.AuthenticationType);
+
+				//These are KVP data that is sent back in the clear and accessed via the returned data 
             AuthenticationProperties properties = CreateProperties(user.UserName);
             AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, properties);
             context.Validated(ticket);
@@ -62,6 +72,10 @@ namespace LocalAccountsApp.Providers
 
         public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
+				//This can be used to gather client credentials from Basic auth
+			 //Domick hiut son this briefly in http://www.pluralsight.com/training/player?author=dominick-baier&name=webapi-v2-security-m6a-tokens&mode=live&clip=0&course=webapi-v2-security
+			 // in 'Token Based Authentication- Part 1' chapter I think in the sub 'Trusted Applications' or "Demo: Resource Owner Credentail Flow'
+
             // Resource owner password credentials does not provide a client ID.
             if (context.ClientId == null)
             {
@@ -90,7 +104,9 @@ namespace LocalAccountsApp.Providers
         {
             IDictionary<string, string> data = new Dictionary<string, string>
             {
-                { "userName", userName }
+                //{ "userName", userName }
+					 { "userName", userName},
+					 {"added", "ByMe"}
             };
             return new AuthenticationProperties(data);
         }

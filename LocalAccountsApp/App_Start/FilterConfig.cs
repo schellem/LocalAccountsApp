@@ -8,7 +8,10 @@ namespace LocalAccountsApp
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
-            filters.Add(new RequireHttpsAttribute());
+#if!DEBUG  
+			 filters.Add(new RequireHttpsAttribute());
+#endif
+
         }
     }
 }

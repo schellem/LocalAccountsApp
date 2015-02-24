@@ -330,6 +330,8 @@ namespace LocalAccountsApp.Controllers
 
             var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
 
+				//HOW CAN WE ADD A CLIM TO DATABSASE ????
+
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)

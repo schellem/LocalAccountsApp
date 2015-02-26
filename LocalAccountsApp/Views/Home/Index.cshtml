@@ -14,7 +14,10 @@
   plugged in from RegisterGlobalFilters. Make sure to search the code for 'RequireHttps' to look into HTTPS operation.
 </p>
 <h4>Token with Custom Claim</h4>
-<p>After registering and logging in use the 'Call API' button to make an API call, the Claim names from the Token are displayed in the Result section, see the ApplicationOAuthProvider.GrantResourceOwnerCredentials for where the Token is generated</p>
+<p>
+  After registering and logging in use the 'Call API' button to make an API call, the Claim names from the Token are displayed in the Result section, see the ApplicationOAuthProvider.GrantResourceOwnerCredentials for where the Token is generated.
+  <b>Great </b> <a href="http://odetocode.com/blogs/scott/archive/2015/01/15/using-json-web-tokens-with-katana-and-webapi.aspx" target="_blank"> article</a> by Scott Allen on web tokens and how to use them with simple authentication.
+</p>
 <div class="row">
   <div class="col-sm-4">
     <form data-bind="submit: callApi">
@@ -31,7 +34,7 @@
       <div class="form-group">
         <button type="submit" class="btn btn-default" data-bind="css:{ 'alert-info': user() != null && user().length > 0 }">Call API</button>
       </div>
-      
+
     </form>
   </div>
 
